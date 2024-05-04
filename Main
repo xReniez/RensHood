@@ -1,0 +1,149 @@
+local plr = game.Players.LocalPlayer
+local Gui = Instance.new("ScreenGui", plr.PlayerGui)
+Gui.Name = "RensHood"
+
+local TweenService = game:GetService("TweenService")
+
+local OldLocation = UDim2.fromScale(0.502, 0.499)
+
+local Main = Instance.new("Frame", Gui)
+Main.Visible = false
+Main.Name = "Main"
+Main.Size = UDim2.fromScale(0.431, 0.43)
+Main.Position = UDim2.fromScale(0.502, 0.499)
+Main.AnchorPoint = Vector2.new(0.5, 0.5)
+Main.BackgroundColor3 = Color3.fromRGB(83, 83, 83)
+
+local function StartUp()
+	
+	-- add loading text while gui loads
+	local UIStroke = Instance.new("UIStroke", Main)
+	UIStroke.Color = Color3.fromRGB(65, 65, 65)
+	UIStroke.Thickness = 3.3
+	local UICorner = Instance.new("UICorner", Main)
+	UICorner.CornerRadius = UDim.new(0, 25)
+	local Line = Instance.new("Frame", Main)
+	Line.Name = "Line"
+	Line.BackgroundColor3 = Color3.fromRGB(0,0,0)
+	Line.Transparency = 0.65
+	Line.Position = UDim2.fromScale(-0.004, 0.087)
+	Line.Size = UDim2.fromScale(1.003, 0.009)
+	local Title = Instance.new("TextLabel", Main)
+	Title.Name = "Title"
+	Title.TextColor3 = Color3.fromRGB(169, 78, 255)
+	Title.TextDirection = Enum.TextDirection.LeftToRight
+	Title.TextScaled = true
+	Title.Position = UDim2.fromScale(0.015, 0)
+	Title.Size = UDim2.fromScale(0.352, 0.087)
+	Title.TextStrokeTransparency = 0.71
+	Title.BackgroundTransparency = 1
+	Title.Text = "⭐RensHood"
+	local Version1 = Instance.new("TextLabel", Main)
+	Version1.Name = "Title"
+	Version1.TextColor3 = Color3.fromRGB(169, 78, 255)
+	Version1.TextDirection = Enum.TextDirection.LeftToRight
+	Version1.TextScaled = true
+	Version1.Position = UDim2.fromScale(0.849, 0)
+	Version1.Size = UDim2.fromScale(0.124, 0.087)
+	Version1.TextStrokeTransparency = 0.71
+	Version1.BackgroundTransparency = 1
+	Version1.Text = "V0.1"
+	Main.Visible = true
+end
+
+StartUp()
+
+local UserInputService = game:GetService('UserInputService')
+
+local leadFrame = Instance.new('Frame') do
+	leadFrame.AnchorPoint = Main.AnchorPoint
+	leadFrame.Position = Main.Position
+	leadFrame.Size = Main.Size
+	leadFrame.Name = `Lead {Main.Name}`
+	leadFrame.Visible = false
+	leadFrame.Parent = Main.Parent
+end
+
+local screenGui = Main:FindFirstAncestorOfClass('ScreenGui')
+
+local inputChanged = nil
+local inputEnded = nil
+
+Main.InputBegan:Connect(function(inputObject : InputObject)
+	if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
+		local lastMousePosition = UserInputService:GetMouseLocation()
+		local goalPosition = Main.Position
+
+		inputChanged = UserInputService.InputChanged:Connect(function(input : InputObject, event : boolean)
+			if input.UserInputType == Enum.UserInputType.MouseMovement then
+				local currentMousePosition = UserInputService:GetMouseLocation()
+				local mouseDelta = currentMousePosition - lastMousePosition
+				goalPosition += UDim2.fromOffset(mouseDelta.X, mouseDelta.Y)
+				leadFrame.Position = goalPosition
+				goalPosition += UDim2.fromOffset(x, y)
+				Main.Position = goalPosition
+				lastMousePosition = currentMousePosition
+			end
+		end)
+
+		inputEnded = Main.InputEnded:Connect(function(input : InputObject)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 then
+				inputChanged:Disconnect()
+				inputChanged = nil
+				inputEnded:Disconnect()
+				inputEnded = nil
+			end
+		end)
+	end
+end)
+
+Main.Destroying:Once(function()
+	leadFrame = leadFrame:Destroy()
+
+	if inputChanged  then
+		inputChanged:Disconnect()
+		inputChanged = nil
+	end
+
+	if inputEnded then
+		inputEnded:Disconnect()
+		inputEnded = nil
+	end
+end)
+
+local debounce = false
+
+UserInputService.InputBegan:Connect(function(Key, typing)
+	if typing ~= nil then
+		if Key.KeyCode == Enum.KeyCode.V then
+			if not debounce then
+				debounce = true
+				if Main.Visible == true then
+					OldLocation = Main.Position
+					local TweenStuff = TweenInfo.new(0.3, Enum.EasingStyle.Circular, Enum.EasingDirection.In, 0, false)
+					local Goal = {Position = UDim2.fromScale(0.5,2)}    
+					local Tween = TweenService:Create(Main, TweenStuff, Goal)    
+					Tween:Play()
+					if inputChanged == nil then
+						else
+						inputChanged:Disconnect()
+						inputChanged = nil
+						inputEnded:Disconnect()
+						inputEnded = nil
+					end
+					delay(task.wait(0.3), function()
+						Main.Visible = false
+					end)
+				elseif Main.Visible == false then
+					Main.Visible = true
+					local TweenStuff = TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.In, 0, false)
+					local Goal = {Position = OldLocation}    
+					local Tween = TweenService:Create(Main, TweenStuff, Goal)    
+					Tween:Play()
+				end
+				task.wait(0.5)
+				debounce = false
+			end
+		end
+	end
+end)
