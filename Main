@@ -30,7 +30,7 @@ local function ESPToggle()
 	if Toggles.ESP == false then
 		Toggles.ESP = true
 		task.spawn(function()
-			while true do
+			while task.wait(1) do
 				if Toggles.ESP == false then
 					break
 				end
