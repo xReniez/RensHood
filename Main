@@ -35,6 +35,7 @@ local function ESPToggle()
 					break
 				end
 				for i,v in pairs(game.Workspace.Players:GetChildren()) do
+					task.wait(0.5)
 					if v.Name == plr.Name then
 					else
 						if v:FindFirstChild("ESPView") then
