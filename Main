@@ -30,36 +30,33 @@ local function ESPToggle()
 	if Toggles.ESP == false then
 		Toggles.ESP = true
 		task.spawn(function()
-			while task.wait(1) do
+			for i,v in pairs(game.Workspace.Players:GetChildren()) do
 				if Toggles.ESP == false then
 					break
 				end
-				for i,v in pairs(game.Workspace.Players:GetChildren()) do
-					task.wait(0.5)
-					if v.Name == plr.Name then
+				if v.Name == plr.Name then
+				else
+					if v:FindFirstChild("ESPView") then
 					else
-						if v:FindFirstChild("ESPView") then
-						else
-							local newESP = Instance.new("Highlight", v)
-							newESP.Name = "ESPView"
-							newESP.FillColor = Color3.fromRGB(170, 85, 255)
-							newESP.FillTransparency = 1
-							newESP.OutlineColor = Color3.fromRGB(170, 85, 255)
-						end
-						if v.Head:FindFirstChild("OverheadText") then
-						else
-							local OverheadText = Instance.new("BillboardGui", v.Head)
-							OverheadText.Size = UDim2.fromOffset(150, 25)
-							OverheadText.AlwaysOnTop = true
-							OverheadText.StudsOffset = Vector3.new(0,3,0)
-							OverheadText.Name = "OverheadText"
-							local Text = Instance.new("TextLabel", OverheadText)
-							Text.Size = UDim2.fromOffset(150, 25)
-							Text.BackgroundTransparency = 1
-							Text.TextColor3 = Color3.fromRGB(170, 85, 255)
-							Text.TextStrokeTransparency = 0.5
-							Text.Text = v.Name
-						end
+						local newESP = Instance.new("Highlight", v)
+						newESP.Name = "ESPView"
+						newESP.FillColor = Color3.fromRGB(170, 85, 255)
+						newESP.FillTransparency = 1
+						newESP.OutlineColor = Color3.fromRGB(170, 85, 255)
+					end
+					if v.Head:FindFirstChild("OverheadText") then
+					else
+						local OverheadText = Instance.new("BillboardGui", v.Head)
+						OverheadText.Size = UDim2.fromOffset(150, 25)
+						OverheadText.AlwaysOnTop = true
+						OverheadText.StudsOffset = Vector3.new(0,3,0)
+						OverheadText.Name = "OverheadText"
+						local Text = Instance.new("TextLabel", OverheadText)
+						Text.Size = UDim2.fromOffset(150, 25)
+						Text.BackgroundTransparency = 1
+						Text.TextColor3 = Color3.fromRGB(170, 85, 255)
+						Text.TextStrokeTransparency = 0.5
+						Text.Text = v.Name
 					end
 				end
 			end
