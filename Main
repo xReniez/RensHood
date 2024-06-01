@@ -42,7 +42,7 @@ local function ESPToggle()
 						newESP.Name = "ESPView"
 						newESP.FillColor = Color3.fromRGB(170, 85, 255)
 						newESP.FillTransparency = 1
-						newESP.OutlineColor = Color3.fromRGB(170, 85, 255)
+						newESP.OutlineColor = Color3.fromRGB(255,255,255)
 					end
 					if v.Head:FindFirstChild("OverheadText") then
 					else
@@ -55,7 +55,7 @@ local function ESPToggle()
 						Text.Size = UDim2.fromOffset(150, 25)
 						Text.BackgroundTransparency = 1
 						Text.TextColor3 = Color3.fromRGB(170, 85, 255)
-						Text.TextStrokeTransparency = 0.5
+						Text.TextStrokeTransparency = 0.8
 						Text.Text = v.Name
 					end
 				end
